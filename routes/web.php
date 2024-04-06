@@ -4,6 +4,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\WeatherController;
+use App\Http\Controllers\MapController;
+use Nette\Iterators\Mapper;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +36,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
 });
+
+Route::get('/weather', [WeatherController::class, 'getWeather'])->name('weather');
+
+Route::get('/map', [MapController::class, 'index'])->name('map');
+
 
 require __DIR__.'/auth.php';
