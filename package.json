@@ -17,6 +17,8 @@
         "vue": "^3.2.41"
     },
     "dependencies": {
+        "maplibre-gl": "^3.6.2",
+        "radar-sdk-js": "^4.1.18",
         "vue2-google-maps": "^0.10.7"
     }
 }
