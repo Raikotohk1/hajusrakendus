@@ -14,9 +14,9 @@ class MarkerController extends Controller
     public function index()
     {
         $markers = Marker::all();
-        $apiKey = Config::get('services.map.key');
+        $mapKey = Config::get('services.map.key');
 
-        return view('markers.index', compact('markers', 'apiKey'));
+        return view('markers.index', compact('markers', 'mapKey'));
     }
 
     /**

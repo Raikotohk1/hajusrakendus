@@ -36,9 +36,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const mapContainer = document.getElementById('map');
-            const apiKey = {!! json_encode($apiKey) !!}; // Accessing API key from .env file
+            const mapKey = {!! json_encode($mapKey) !!}; // Accessing API key from .env file
 
-            Radar.initialize(apiKey);
+            Radar.initialize(mapKey);
 
             const map = Radar.ui.map({
                 container: mapContainer,
