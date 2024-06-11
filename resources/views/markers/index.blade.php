@@ -29,7 +29,8 @@
 
 <body>
     <div id="map-container">
-        <div id="map"></div>
+        <div id="map" style="width: 100%; height:500px;"></div>
+
     </div>
 
     <script src="https://js.radar.com/v4.1.18/radar.min.js"></script>
@@ -58,7 +59,7 @@
             }
 
             // Add event listener for click on map
-            map.on('click', addMarkerOnClick);
+            map.on('dblclick', addMarkerOnClick);
 
             // Function to remove map when the page is unloaded
             window.addEventListener('beforeunload', function () {
