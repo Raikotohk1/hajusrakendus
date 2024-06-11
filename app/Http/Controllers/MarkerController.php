@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Marker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class MarkerController extends Controller
 {
@@ -13,8 +14,9 @@ class MarkerController extends Controller
     public function index()
     {
         $markers = Marker::all();
+        $apiKey = Config::get('services.map.key');
 
-        return view('markers.index', compact('markers'));
+        return view('markers.index', compact('markers', 'apiKey'));
     }
 
     /**
