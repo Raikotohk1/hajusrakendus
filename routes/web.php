@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,11 @@ Route::post('/markers', [MarkerController::class, 'store'])->name('markers.store
 Route::get('/markers/{id}/edit', [MarkerController::class, 'edit'])->name('markers.edit');
 Route::put('/markers/{id}', [MarkerController::class, 'update'])->name('markers.update');
 Route::delete('/markers/{id}', [MarkerController::class, 'destroy'])->name('markers.destroy');
+
+Route::resource('chirps', ChirpController::class);
+Route::get('chirps/{chirp}/edit', [ChirpController::class, 'edit'])->name('chirps.edit');
+Route::put('chirps/{chirp}', [ChirpController::class, 'update'])->name('chirps.update');
+
 
 
 require __DIR__.'/auth.php';

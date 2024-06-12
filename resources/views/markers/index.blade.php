@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,16 +49,39 @@
                 zoom: 11
             });
 
+            const markers = {!! json_encode($markers) !!};
+
+            markers.forEach(markerInfo => {
+                const marker = Radar.ui.marker({ text: markerInfo.description })
+                    .setLngLat([markerInfo.latitude, markerInfo.longitude])
+                    .addTo(map);
+            });
+
             // Add marker function
             function addMarkerOnClick(e) {
                 const coordinates = e.lngLat;
+        
+                    var lat = coordinates.lat;
+                    var lng = coordinates.lng;
                 Radar.ui.marker({
                         color: '#ff0000' // Red color for the markers added by click
                     })
                     .setLngLat(coordinates)
                     .addTo(map);
+                    fillForm(lat, lng);
             }
+            function fillForm(lat, lng) {
+                var latInput = document.getElementById('latitude');
+                var lngInput = document.getElementById('longitude');
 
+                if (latInput && lngInput) {
+                    latInput.value = lng;
+                    lngInput.value = lat;
+
+                } else {
+                    console.error("Latitude or longitude input element not found.")
+                }
+            }
             // Add event listener for click on map
             map.on('dblclick', addMarkerOnClick);
 
