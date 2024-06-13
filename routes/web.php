@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\WeatherController;
 use Nette\Iterators\Mapper;
 use App\Http\Controllers\MarkerController;
+use App\Http\Controllers\RecordsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,6 @@ Route::resource('chirps', ChirpController::class);
 Route::get('chirps/{chirp}/edit', [ChirpController::class, 'edit'])->name('chirps.edit');
 Route::put('chirps/{chirp}', [ChirpController::class, 'update'])->name('chirps.update');
 
-
+Route::get('records', [RecordsController::class, 'index'])->name('records.index');
 
 require __DIR__.'/auth.php';
