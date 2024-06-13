@@ -10,4 +10,6 @@ class Marker extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'latitude', 'longitude', 'description'];
+
+    protected $primaryKey = 'id';
 }

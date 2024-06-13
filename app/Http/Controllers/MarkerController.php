@@ -86,16 +86,13 @@ class MarkerController extends Controller
     /**
      * Remove the specified marker from storage.
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $marker = Marker::find($id);
-        if ($marker) {
-            $marker->delete();
+        
+        //$marker->delete();
 
-            return redirect()->route('markers.index')
-                ->with('success', 'Marker deleted successfully');
-        } else {
-            return redirect()->back()->withErrors('Marker not found.');
-        }
+    dd($request);
+
+    return redirect()->route('markers.index')->with('success', 'Marker deleted successfully.');
     }
 }

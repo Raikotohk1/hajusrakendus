@@ -183,6 +183,12 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Update Marker</button>
                     </form>
+
+                    <form action="{{ route('markers.destroy') }}" method="POST" class="mt-2">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Delete Marker</button>
+                    </form>
                 </div>
             </div>
         </div>
