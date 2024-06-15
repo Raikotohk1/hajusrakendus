@@ -13,6 +13,18 @@
                         @method('DELETE')
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                     </form>
+                    
+                    
+                     
+                    <form action="{{ route('chirps.comments.store', $chirp) }}" method="POST">
+                        @csrf
+                        <div class="mt-2">
+                            <input type="text" name="comment" class="border-gray-300 rounded-md w-full" placeholder="Add a comment...">
+                            <div class="flex justify-end">
+                                <button type="submit" class="mt-2">{{ __('Comment') }}</button>
+                            </div>
+                        </div>
+                    </form>
                 </li>
             @endforeach
         </ul>

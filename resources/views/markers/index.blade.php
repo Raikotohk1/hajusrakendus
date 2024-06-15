@@ -68,6 +68,7 @@
                         $('#editLongitude').val(markerInfo.longitude);
                         $('#editDescription').val(markerInfo.description);
                         $('#editMarkerModal').modal('show');
+                        $('#destroyMarker').attr('action', `{{ url('markers') }}/${markerInfo.id}`);
                     });    
             });
 
@@ -184,7 +185,7 @@
                         <button type="submit" class="btn btn-primary">Update Marker</button>
                     </form>
 
-                    <form action="{{ route('markers.destroy') }}" method="POST" class="mt-2">
+                    <form id="destroyMarker" action="" method="POST" class="mt-2">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Delete Marker</button>
