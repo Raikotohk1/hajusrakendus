@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Chirp;
 use App\Models\Comment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,30 +21,25 @@ class CommentController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Chirp $chirp): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
+        $validated = $request->validate([
+            'body' => 'required|string|max:255',
+            'blog_id' => 'exists:blogs,id',
+            'user_id' => 'exists:users,id',
+        ]);
+
+        $request->user()->comments()->create($validated);
+      
         
-        $validated = $request->validate(
 
-            [
-                'comment' => 'required|string|max:255',
-            ]);
-        
-            $comment = new Comment();
-            $comment->comment = $validated['comment'];
-            $comment->user_id = $request->user()->id;
-            $comment->chirp_id = $chirp->id;
-            $comment->save();
-
-            $chirp->update($validated);
-
-            return redirect(route('chirps.index'));
+        return redirect()->back()->with('message', 'Comment added successfully!');
     }
 
     /**
@@ -67,27 +61,20 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Chirp $chirp): RedirectResponse
+    public function update(Request $request, Comment $comment)
     {
-        $this->authorize('update', $chirp);
-
-        $validated=$request->validate(
-            [
-                'message' => 'required|string|max:255',
-            ]);
-
-            $chirp->update($validated);
-
-            return redirect(route('chirps.index'));
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comment $comment)
+    public function destroy(Comment $comment): RedirectResponse
     {
+        $this->authorize('delete', $comment);
+
         $comment->delete();
 
-        return back()->with('success', 'Comment deleted successfully.');
+        return redirect()->back()->with('message', 'Post deleted successfully!');
     }
 }

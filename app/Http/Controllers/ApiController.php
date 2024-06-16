@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bicycle;
 use Illuminate\Http\Request;
 
 class ApiController extends Controller
@@ -11,7 +12,9 @@ class ApiController extends Controller
      */
     public function index()
     {
-        //
+        $responseData = Bicycle::select("title", "manufactor", "price", "description")->get();
+
+        return response()->json($responseData);
     }
 
     /**

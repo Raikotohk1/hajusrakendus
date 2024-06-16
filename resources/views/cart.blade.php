@@ -1,97 +1,93 @@
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        @section('content')
-        <h1 class="m-4 font-bold">Shopping Cart</h1>
-        <div class="cart">
-
-            @if(session()->has('cart') && count(session('cart')) > 0)
-            <div class="cart-item grid grid-row grid-cols-4 m-4 h-12 items-center">
-                @foreach(session('cart') as $index => $cartItem)
-                <div>
-                    <h2 class="pb-4">{{ $cartItem['name'] }}</h2>
-                </div>
-                    <div>
-                        <form action="{{ route('updateCartItem', $index) }}" method="POST">
-                            @csrf
-                            @method('PATCH')
-                            <p>
-                                Quantity:
-                                <input class="w-16" type="number" name="quantity" value="{{ $cartItem['quantity'] }}" min="1" max="99"/>
-                                <button type="submit">Update</button>
-                            </p>
-                        </form>
-                    </div>
-                    <div  class="text-center">
-                        <p class="pb-4">Price: {{ $cartItem['price'] }} €</p>
-                    </div>
-                    <div class="text-right">
-                        <form action="{{ route('removeFromCart', $index) }}" method="POST">
-                            @csrf
-                            @method('POST')
-                            <button class="text-right" type="submit">X</button>
-                        </form>
-                    </div>
-                    @endforeach
-                    @if(session()->has('coupon'))
-                        @php
-                            $coupon = session('coupon');
-                        @endphp
-                        <div>
-                            <h2 class="pb-4">{{ $coupon['code'] }}</h2>
-                        </div>
-                        <div>
-                            <p>
-                                Quantity: 1
-                            </p>
-                        </div>
-                        <div>
-                            <p class="text-center">
-                                Discount: {{$coupon['discount']}} €
-                            </p>
-                        </div>
-                        <div class="text-right">
-                            <form action="{{ route('removeCoupon') }}" method="POST">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <style>
+        /* Adjust styling as needed */
+        .quantity {
+            width: 60px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center mb-5">Shopping Cart</h1>
+    <table id="cart" class="table table-bordered table-hover table-condensed">
+        <thead>
+            <tr>
+                <th style="width:50%">Product</th>
+                <th style="width:8%">Quantity</th>
+                <th style="width:22%" class="text-center">Subtotal</th>
+                <th style="width:10%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php $total = 0 ?>
+            @if(session('cart'))
+                @foreach(session('cart') as $id => $details)
+                    <?php $total += $details['price'] * $details['quantity'] ?>
+                    <tr data-id="{{ $id }}">
+                        <td data-th="Product">
+                            <div class="row">
+                                <div class="col-sm-3 hidden-xs"><img src="{{ $details['photo'] }}" width="50" height="50" class="img-responsive"/></div>
+                                <div class="col-sm-9">
+                                    <h4 class="nomargin">{{ $details['name'] }}</h4>
+                                </div>
+                            </div>
+                        </td>
+                        <td data-th="Quantity">
+                            <input type="number" value="{{ $details['quantity'] }}" class="form-control quantity"/>
+                        </td>
+                        <td data-th="Subtotal" class="text-center subtotal">${{ $details['price'] * $details['quantity'] }}</td>
+                        <td class="actions" data-th="">
+                            <form action="{{ route('removeFromCart') }}" method="POST">
                                 @csrf
-                                @method('POST')
-                                <button class="text-right" type="submit">X</button>
+                                @method('DELETE')
+                                <input type="hidden" name="id" value="{{ $id }}">
+                                <button class="btn btn-danger btn-sm">Remove</button>
                             </form>
-                        </div>
-                    @endif
-                </div>
-            </div>
-            <div class="pt-16">
-                <div class="p-4">
-                <form action="/apply-coupon" method="POST">
-                    @csrf
-                    
-                    <input type="text" name="coupon_code"/>
-                    <button type="submit">Apply Coupon</button>
-                </form>
-                </div>
-                <p class="m-4 font-bold">total sum: {{ $total }} €</p>
-                <div class="m-4 font-bold flex flex-row justify-between">
-                    <a href="{{ route('records') }}">
-                        <button>Back to shopping</button>
-                    </a>
-                    <form action="{{ route('checkout.checkout') }}" method="POST">
-                        @csrf
-                        <button type="submit">
-                            Checkout
-                        </button>
-                    </form>
-                </div>
-            </div>        
-    </div>
-        @else
-    <div>
-        <div class="my-4 mx-6">
-            <p class="my-2">No items in cart</p>
-            <a href="{{ route('bicycles.index') }}">
-                <button>
-                    Back to shopping
-                </button>
-            </a>
-        </div>
-    </div>
-        @endif
+                        </td>
+                    </tr>
+                @endforeach
+            @endif
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-right"><strong>Total $<span id="total">{{ $total }}</span></strong></td>
+                <td>
+                    <a href="{{ route('stripe.checkout', ['total' => $total]) }}" class="btn btn-primary btn-sm">Proceed to Payment</a>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $('.quantity').on('change', function() {
+            var id = $(this).closest('tr').data('id');
+            var quantity = $(this).val();
+
+            $.ajax({
+                url: '{{ route('updateCart') }}',
+                method: 'patch',
+                data: {
+                    id: id,
+                    quantity: quantity,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    $('#total').text(data.total);
+                    // Update subtotal for the specific item
+                    $('tr[data-id="' + id + '"] .subtotal').text('$' + data.subtotal);
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -9,19 +9,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Comment extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'chirp_id',
-        'user_id',
-        'comment',
+        'blog_id',
+        'body',
     ];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function chirp(): BelongsTo
+    public function blog(): BelongsTo
     {
-        return $this->belongsTo(Chirp::class);
+        return $this->belongsTo(Blog::class);
     }
 }

@@ -8,7 +8,7 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav ">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('chirps.index') }}">Chirps</a>
+                        <a class="nav-link" href="{{ route('show.index') }}">Posts</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>

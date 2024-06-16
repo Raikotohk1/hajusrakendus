@@ -17,31 +17,12 @@
                     <p class="card-text">{{ $bicycle->description }}</p>
                     <p class="card-text"><strong>Manufactor:</strong> {{ $bicycle->manufactor }}</p>
                     <p class="card-text"><strong>Price:</strong> ${{ $bicycle->price }}</p>
+                    <a href="{{ route('addToCart', $bicycle->id) }}" class="btn btn-warning btn-block text-center">Add to Cart</a>
                 </div>
-                <form id="addToCartForm" action="{{ route('addToCart', ['product_id' => $bicycle['id'], 'quantity' => ':amount']) }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="product_id" value="{{ $bicycle['product_id'] }}">
-                    <label for="amount">
-                        Select amount:
-                    </label>
-                    <input type="number" id="amount" name="amount" min="1" max="99" value="1" />
-                    <button type="submit">
-                        Add to Cart
-                    </button>
-                </form>
             </div>
         </div>
-        
         @endforeach
     </div>
 </div>
-<script>
-    document.getElementById('amount').addEventListener('change', function() {
-        var amount = this.value;
-        var formAction = "{{ route('addToCart', ['product_id' => $bicycle['id'], 'quantity' => ':amount']) }}";
-        formAction = formAction.replace(':amount', amount);
-        document.getElementById('addToCartForm').action = formAction;
-    });
-</script>
 </body>
 </html>
